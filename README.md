@@ -1,8 +1,8 @@
 # Wookiee - Component: Spray (HTTP)
 
-[![Build Status](https://travis-ci.org/Webtrends/wookiee-spray.svg?branch=master)](https://travis-ci.org/Webtrends/wookiee-spray) [![Coverage Status](https://coveralls.io/repos/Webtrends/wookiee-spray/badge.svg?branch=master&service=github)](https://coveralls.io/github/Webtrends/wookiee-spray?branch=master) [![Latest Release](https://img.shields.io/github/release/webtrends/wookiee-spray.svg)](https://github.com/Webtrends/wookiee-spray/releases) [![License](http://img.shields.io/:license-Apache%202-red.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[![Build Status](https://travis-ci.org/oracle/wookiee-spray.svg?branch=master)](https://travis-ci.org/oracle/wookiee-spray) [![Latest Release](https://img.shields.io/github/release/oracle/wookiee-spray.svg)](https://github.com/oracle/wookiee-spray/releases) [![License](http://img.shields.io/:license-Apache%202-red.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-[Main Wookiee Project](https://github.com/Webtrends/wookiee)
+[Main Wookiee Project](https://github.com/oracle/wookiee)
 
 For Configuration information see [Spray Config](docs/config.md)
 
@@ -10,50 +10,44 @@ The Spray component has both server and client http functionality. The server co
 
 For working example see [Wookiee - Http Example](example-http) or [Wookiee - Rest Example](example-rest)
 
+### Adding to Pom
+
+Add the jfrog repo to your project first:
+~~~~
+<repositories>
+    <repository>
+        <id>JFrog</id>
+        <url>http://oss.jfrog.org/oss-release-local</url>
+    </repository>
+</repositories>
+~~~~
+
+Add [latest version](https://github.com/oracle/wookiee-zookeeper/releases/latest) of wookiee:
+~~~~
+<dependency>
+    <groupId>com.webtrends</groupId>
+    <artifactId>wookiee-spray</artifactId>
+    <version>${wookiee.version}</version>
+</dependency>
+~~~~
+
 ## Config
 ```json
 wookiee-spray {
-  manager = "com.webtrends.harness.component.http.SprayManager"
-  enabled = true
+  manager = "com.webtrends.harness.component.http.SprayManager" // default, not required
+  enabled = true // default, not required
+  
+  internal.enabled = true // default, not required
+  websocket.enabled = true // default, not required
 
   # The port to run the http server on
-  http-port = 8080 
+  http-port = 8080 // default, not required
+  
+  # The port to run the http server on
+  http-external-port = 8082 // only needed if using an 'internal' and 'external' setup
 
   # The port to run the websocket server on
-  http-port = 8081 
-}
-spray {
-  can {
-    server {
-      server-header = "harness"
-      request-timeout = 60s
-      idle-timeout = 120s
-
-      # Enables/disables the addition of a `Remote-Address` header
-      # holding the clients (remote) IP address.
-      remote-address-header = on
-      # Enables/disables support for statistics collection and querying.
-      stats-support = on
-    }
-    parsing {
-      max-uri-length: 16k
-    }
-  }
-  client {
-    idle-timeout = 120 s
-    request-timeout = 60 s
-  }
-  host-connector {
-    max-connections = 10
-    max-retries = 2
-    pipelining = on
-  }
-}
-akka.actor.deployment {
-  /system/component/wookiee-spray/spray-server/spray-base {
-    router = round-robin-pool
-    nr-of-instances = 3
-  }
+  websocket-port = 8081 // default, not required
 }
 ```
 
